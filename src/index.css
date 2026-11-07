@@ -1,0 +1,161 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #1f2a44;
+  --color-ink-soft: #5b6680;
+  --color-sky: #4fc3f7;
+  --color-sky-deep: #1e9fd8;
+  --color-sky-soft: #e1f5fe;
+  --color-sky-ink: #0a6f9e;
+  --color-coral-ink: #c0392b;
+  --color-mint: #5bd6a0;
+  --color-mint-deep: #23a46c;
+  --color-mint-soft: #e3f8ee;
+  --color-sun: #ffd54f;
+  --color-sun-deep: #f5b800;
+  --color-sun-soft: #fff6d6;
+  --color-coral: #ff8a80;
+  --color-coral-deep: #f2645a;
+  --color-coral-soft: #ffebe9;
+  --color-lavender: #b39ddb;
+  --color-lavender-soft: #efe9fa;
+  --color-page: #f4fbff;
+  --font-sans: 'Cairo', 'Segoe UI', Tahoma, system-ui, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Soft colour washes behind everything */
+.ambient {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(55% 45% at 85% 10%, rgb(79 195 247 / 0.22), transparent 70%),
+    radial-gradient(50% 40% at 10% 20%, rgb(255 138 128 / 0.16), transparent 70%),
+    radial-gradient(45% 40% at 50% 100%, rgb(91 214 160 / 0.18), transparent 70%),
+    radial-gradient(35% 30% at 15% 85%, rgb(255 213 79 / 0.18), transparent 70%),
+    var(--color-page);
+}
+
+/* Faint sporty emoji scattered in the background */
+.sport-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.sport-bg span {
+  position: absolute;
+  opacity: 0.09;
+  user-select: none;
+  animation: float 9s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-14px) rotate(8deg); }
+}
+
+.title-gradient {
+  background: linear-gradient(270deg, var(--color-sky-deep), var(--color-lavender) 50%, var(--color-coral-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Keeps Arabic letter joins crisp while clipped */
+  padding-block: 0.08em;
+}
+
+.card {
+  background: rgb(255 255 255 / 0.85);
+  border: 1px solid rgb(31 42 68 / 0.06);
+  box-shadow: 0 10px 30px rgb(31 42 68 / 0.08), 0 2px 6px rgb(31 42 68 / 0.04);
+  backdrop-filter: blur(6px);
+}
+
+/* Center square breathing glow */
+@keyframes center-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 213 79 / 0.0), 0 6px 18px rgb(245 184 0 / 0.25); }
+  50%      { box-shadow: 0 0 0 8px rgb(255 213 79 / 0.25), 0 6px 24px rgb(245 184 0 / 0.35); }
+}
+.center-glow { animation: center-pulse 2.6s ease-in-out infinite; }
+
+@keyframes center-win {
+  0%, 100% { box-shadow: 0 0 0 6px rgb(255 213 79 / 0.45), 0 0 40px rgb(255 213 79 / 0.6); }
+  50%      { box-shadow: 0 0 0 14px rgb(255 213 79 / 0.25), 0 0 70px rgb(255 213 79 / 0.8); }
+}
+.center-won { animation: center-win 1.4s ease-in-out infinite; }
+
+/* Token "landing" pop each time it arrives on a square */
+@keyframes land {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.2) translateY(-10%); }
+  70%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+.token-land { animation: land 0.55s cubic-bezier(.2,.8,.3,1); }
+
+@keyframes winner-bob {
+  0%, 100% { transform: scale(1.1); }
+  50%      { transform: scale(1.22); }
+}
+.token-winner { animation: winner-bob 1.4s ease-in-out infinite; }
+
+/* Answer feedback */
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.answer-pop { animation: pop 0.35s ease-out; }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+.answer-shake { animation: shake 0.35s ease-in-out; }
+
+/* Win announcement */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+.rise-in { animation: rise-in 0.6s cubic-bezier(.2,.8,.3,1) both; }
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: fade-in 0.4s ease both; }
+
+/* Confetti */
+@keyframes confetti-fall {
+  0%   { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translate3d(var(--drift), 105vh, 0) rotate(var(--spin)); opacity: 0.9; }
+}
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  border-radius: 3px;
+  animation: confetti-fall var(--dur) cubic-bezier(.25,.6,.4,1) var(--delay) forwards;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
